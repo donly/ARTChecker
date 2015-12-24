@@ -1,8 +1,12 @@
 package com.magicalboy.artchecker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,16 +28,20 @@ public class MainActivity extends Activity {
         int currentAPIVersion = android.os.Build.VERSION.SDK_INT;
         String myVersion = android.os.Build.VERSION.RELEASE;
 
-        if (currentAPIVersion > Build.VERSION_CODES.KITKAT){
+        String resultText;
+
+        if (currentAPIVersion > Build.VERSION_CODES.KITKAT) {
             // Lollipop and above versions
-            tv.setText("Your device currently running ART.\n\n Android " + myVersion +
-                    "\nAPI level is " + currentAPIVersion);
+            resultText = "Your device currently running ART.";
         } else{
             // do something for phones running an SDK before lollipop
-            tv.setText("Your device currently running " + getCurrentRuntimeValue() + ".");
+            resultText = "Your device currently running " + getCurrentRuntimeValue() + ".";
         }
 
+        resultText += "\n\nAndroid " + myVersion + "\nAPI level is " + currentAPIVersion +
+        "\nVM version is " + getVMVersion() + ".";
 
+        tv.setText(resultText);
     }
 
     /**
@@ -75,5 +83,55 @@ public class MainActivity extends Activity {
         } catch (ClassNotFoundException e) {
             return "SystemProperties class is not found";
         }
+    }
+
+    /**
+     * get VM version
+     * @return
+     */
+    private final String getVMVersion() {
+        final String vmVersion = System.getProperty("java.vm.version");
+        return vmVersion;
+    }
+
+    protected void showAbout() {
+        // Inflate the about message contents
+        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+
+        // When linking text, force to always use default color. This works
+        // around a pressed color state bug.
+        TextView textView = (TextView) messageView.findViewById(R.id.about_credits);
+        int defaultColor = textView.getTextColors().getDefaultColor();
+        textView.setTextColor(defaultColor);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle(getString(R.string.app_name) + " v1.1");
+        builder.setView(messageView);
+        builder.create();
+        builder.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_about) {
+            showAbout();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
