@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">Über</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="app_credits">"Donly Chan
+
+Email:donly@magicalboy.com
+Github:https://github.com/donly/ARTChecker"</string>
+    <string name="app_descrip">ARTChecker prüft die Laufzeitumgebung (VM) Deines Gerätes - Dalvik oder ART.</string>
+    <string name="app_name">ART Checker</string>
+</resources>
